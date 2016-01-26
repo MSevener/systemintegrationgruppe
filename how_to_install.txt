@@ -1,0 +1,14 @@
+#pip installieren
+sudo apt-get install python-pip
+
+#virtuelle Umgebung
+sudo pip install virtualenv
+
+#pybuilder einrichten
+virtualenv projekt
+source projekt/bin/activate
+pip install pybuilder
+
+#Code einfuegen
+cd projekt
+git repo hier einfuegen
