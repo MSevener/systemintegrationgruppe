@@ -6,6 +6,28 @@ def getAircraftsFromJson():
 	flightData = json.load(flightDataStr)
 	return flightData["aircraft"]
 
+def getAircraft(searchedAircraft):
+	aircrafts = getAircraftsFromJson()
+	i = 0
+	while aircrafts[i][flightIdLong()] <> searchedAircraft and i < len(aircrafts) -1:
+		print i
+		i = i + 1
+	if i < len(aircrafts):
+		return aircrafts[i]
+	else:
+		return 0
+
+def getLocationJson(lat, lng):
+	locationStr = urllib.urlopen('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + str(lat) + ',' + str(lng) + '&sensor=false')
+	return json.load(locationStr)
+
+def getAddress(lat, lng):
+	location = getLocationJson(lat, lng)
+	if location["results"] == []:
+		return 0
+	else:
+		return location["results"][0]["formatted_address"]
+
 def latitude():
 	return 2
 
