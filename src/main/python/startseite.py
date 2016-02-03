@@ -61,7 +61,7 @@ def showDetails(aircraftId):
 	response = response + '<tr><td class = "col-md-4"><b>Flugzeugtyp</b></td>'
         response = response + '<td>' + str(planeType) + '</td></tr>'
 	response = response + '</tbody></table></div><div class = "col-md-4">'
-	response = response + '<img src = "http://www.bildagentur-illustrationen.de/wp-content/uploads/2010/08/flugzeug-comic-grafk.jpg" width = "400px" height = "250px" />'
+	response = response + '<img src = "https://s3.amazonaws.com/mandelbrotm/Flugzeug.jpg" width = "400px" height = "250px" />'
 	response = response + '</div>'
 	
 	response = response + '<div class="container col-md-12"><h1>Reisedaten</h1><table class="table table-striped"><tbody>'
