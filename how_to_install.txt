@@ -15,4 +15,5 @@ git repo hier einfuegen
 
 # build durchlaufen lassen
 #im Ordner projekt
+pyb install_dependencies
 pyb
