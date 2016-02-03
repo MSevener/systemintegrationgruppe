@@ -1,5 +1,6 @@
 import urllib
 import json
+import jsonFiles
 
 def getAircraftsFromJson():
 	flightDataStr = urllib.urlopen('http://krk.data.fr24.com/zones/fcgi/feed.json?array=1')
@@ -10,7 +11,6 @@ def getAircraft(searchedAircraft):
 	aircrafts = getAircraftsFromJson()
 	i = 0
 	while aircrafts[i][flightIdLong()] <> searchedAircraft and i < len(aircrafts) -1:
-		print i
 		i = i + 1
 	if i < len(aircrafts):
 		return aircrafts[i]
@@ -27,6 +27,15 @@ def getAddress(lat, lng):
 		return 0
 	else:
 		return location["results"][0]["formatted_address"]
+
+def getAirportName(airportId):
+	airportArray = jsonFiles.getAirportsJson()
+	airports = airportArray["rows"]
+	for airport in airports:
+		id = airport["iata"]
+		if airportId == id:
+			return airport["name"]
+	return 0
 
 def latitude():
 	return 2
@@ -60,3 +69,6 @@ def speed():
 
 def squawk():
 	return 7
+
+print getAirportName("AAE")
+#print getAirportJson()

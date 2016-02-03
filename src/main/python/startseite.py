@@ -38,8 +38,10 @@ def showDetails(aircraftId):
 	flightId = aircraft[jsonReader.flightIdLong()]
 	planeId = aircraft[jsonReader.planeId()]
 	planeType = aircraft[jsonReader.planeTypeCode()]
-	startAirport = aircraft[jsonReader.startAirport()]
-	targetAirport = aircraft[jsonReader.targetAirport()]
+	startAirportId = aircraft[jsonReader.startAirport()]
+	targetAirportId = aircraft[jsonReader.targetAirport()]
+	startAirportName = jsonReader.getAirportName(startAirportId)
+	targetAirportName = jsonReader.getAirportName(targetAirportId)
 	latitude = aircraft[jsonReader.latitude()]
 	longitude = aircraft[jsonReader.longitude()]
 	address = jsonReader.getAddress(latitude, longitude)
@@ -52,19 +54,19 @@ def showDetails(aircraftId):
 	response = response + '<tr><td class = "col-md-4"><b>Flugzeugtyp</b></td>'
         response = response + '<td>' + planeType + '</td></tr>'
 	response = response + '</tbody></table></div><div class = "col-md-4">'
-	response = response + '<img src = "http://content.mycutegraphics.com/graphics/household/radio-cassette-player-music-notes.png" width = "250px" height = "250px" />'
+	response = response + '<img src = "http://www.bildagentur-illustrationen.de/wp-content/uploads/2010/08/flugzeug-comic-grafk.jpg" width = "400px" height = "250px" />'
 	response = response + '</div>'
 	
 	response = response + '<div class="container col-md-12"><h1>Reisedaten</h1><table class="table table-striped"><tbody>'
 	response = response + '<tr><td><b>Startflughafen</b></td>'
-	response = response + '<td>' + startAirport + '</td></tr>'
+	response = response + '<td>' + startAirportName + ' (' + startAirportId + ')</td></tr>'
 	response = response + '<tr><td><b>Zielflughafen</b></td>'
-        response = response + '<td>' + targetAirport + '</td></tr>'
+        response = response + '<td>' + targetAirportName + ' (' + targetAirportId + ')</td></tr>'
 	response = response + '<tr><td><b>L&auml;ngengrad</b></td>'
         response = response + '<td>' + str(latitude)  + '</td></tr>'
 	response = response + '<tr><td><b>Breitengrad</b></td>'
         response = response + '<td>' + str(longitude) + '</td></tr>'
-	response = response + '<tr><td><b>Aktuelle Adresse</b></td>'
+	response = response + '<tr><td><b>Aktuelle Position</b></td>'
         response = response + '<td>'
 	if address <> 0:
 		response = response + address + '</td>'
@@ -76,14 +78,5 @@ def showDetails(aircraftId):
 	response = response + '</tbody></table></div>'
 	response = response + '</html>'
 	return response
-
-
-
-
-
-
-
-
-	return flightId
 
 run(host=getPublicIp(), port=8080)
