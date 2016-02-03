@@ -1,10 +1,17 @@
 from bottle import route, run, template
 import urllib
 import jsonReader
+import os
+import subprocess
+import string
 
-def getPublicIp():
-	ip = urllib.urlopen('http://ip.42.pl/raw').read()
-	return ip
+def getHostname():
+        hostprocess = subprocess.Popen(['ec2metadata', '--public-hostname'], stdout=subprocess.PIPE)
+        hostname = hostprocess.stdout.read()
+        hostname = hostname.decode('UTF-8')
+	hostname = hostname.strip()
+        return hostname
+
 
 @route('/hello/<name>')
 def index(name):
@@ -21,9 +28,9 @@ def showAircrafts():
 		targetAirport = aircraft[jsonReader.targetAirport()]
 		if flightId <> "" and startAirport <> "" and targetAirport <> "":
 			response = response + '<tr onclick="location.href= \'aircrafts/' + flightId + '\'\">'
-			response = response + '<td>' + flightId + ' </td>'
-			response = response + '<td>' + startAirport + '</td>'
-			response = response + '<td>' + targetAirport + '</td>'
+			response = response + '<td>' + str(flightId) + ' </td>'
+			response = response + '<td>' + str(startAirport) + '</td>'
+			response = response + '<td>' + str(targetAirport) + '</td>'
 			response = response + '</tr>'
 	response = response + '</tbody>  </table></div>'
 	return response
@@ -50,26 +57,26 @@ def showDetails(aircraftId):
 	
 	response = '<!DOCTYPE html><html lang="en"><head>  <title>Flugdaten</title>  <meta charset="utf-8">  <meta name="viewport" content="width=device-width, initial-scale=1">  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script></head><body><div class="container col-md-8">  <h1>Flugzeugdaten</h1>              <table class="table table-striped">    <tbody>'
 	response = response + '<tr><td class = "col-md-4"><b>Flugzeug ID</b></td>'
-	response = response + '<td>' + planeId + '</td></tr>'
+	response = response + '<td>' + str(planeId)+ '</td></tr>'
 	response = response + '<tr><td class = "col-md-4"><b>Flugzeugtyp</b></td>'
-        response = response + '<td>' + planeType + '</td></tr>'
+        response = response + '<td>' + str(planeType) + '</td></tr>'
 	response = response + '</tbody></table></div><div class = "col-md-4">'
 	response = response + '<img src = "http://www.bildagentur-illustrationen.de/wp-content/uploads/2010/08/flugzeug-comic-grafk.jpg" width = "400px" height = "250px" />'
 	response = response + '</div>'
 	
 	response = response + '<div class="container col-md-12"><h1>Reisedaten</h1><table class="table table-striped"><tbody>'
 	response = response + '<tr><td><b>Startflughafen</b></td>'
-	response = response + '<td>' + startAirportName + ' (' + startAirportId + ')</td></tr>'
+	response = response + '<td>' + str(startAirportName) + ' (' + str(startAirportId) + ')</td></tr>'
 	response = response + '<tr><td><b>Zielflughafen</b></td>'
-        response = response + '<td>' + targetAirportName + ' (' + targetAirportId + ')</td></tr>'
-	response = response + '<tr><td><b>L&auml;ngengrad</b></td>'
-        response = response + '<td>' + str(latitude)  + '</td></tr>'
+        response = response + '<td>' + str(targetAirportName) + ' (' + str(targetAirportId) + ')</td></tr>'
 	response = response + '<tr><td><b>Breitengrad</b></td>'
+        response = response + '<td>' + str(latitude)  + '</td></tr>'
+	response = response + '<tr><td><b>L&auml;ngengrad</b></td>'
         response = response + '<td>' + str(longitude) + '</td></tr>'
 	response = response + '<tr><td><b>Aktuelle Position</b></td>'
         response = response + '<td>'
 	if address <> 0:
-		response = response + address + '</td>'
+		response = response + str(address) + '</td>'
 	response = response + '</tr>'
 	response = response + '<tr><td><b>Geschwindigkeit</b></td>'
         response = response + '<td>' + str(speed) + '</td></tr>'
@@ -79,4 +86,5 @@ def showDetails(aircraftId):
 	response = response + '</html>'
 	return response
 
-run(host=getPublicIp(), port=8080)
+run(host=getHostname(), port=8080)
+#print getHostname()
