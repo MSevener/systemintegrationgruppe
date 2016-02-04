@@ -1,21 +1,21 @@
+#!/usr/bin/python
 from bottle import route, run, template
 import urllib
-import jsonReader
+import data.jsonReader as jsonReader
 import os
 import subprocess
 import string
 
 def getHostname():
-        hostprocess = subprocess.Popen(['ec2metadata', '--public-hostname'], stdout=subprocess.PIPE)
-        hostname = hostprocess.stdout.read()
-        hostname = hostname.decode('UTF-8')
+	hostprocess = subprocess.Popen(['ec2metadata', '--public-hostname'], stdout=subprocess.PIPE)
+	hostname = hostprocess.stdout.read()
+	hostname = hostname.decode('UTF-8')
 	hostname = hostname.strip()
-        return hostname
-
+	return hostname
 
 @route('/hello/<name>')
 def index(name):
-    return template('<b>Hello {{name}}</b>!', name=name)
+	return template('<b>Hello {{name}}</b>!', name=name)
 
 @route('/aircrafts')
 def showAircrafts():
