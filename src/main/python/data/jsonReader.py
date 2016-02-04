@@ -2,20 +2,24 @@ import urllib
 import json
 import jsonFiles
 
+# Constants
+# URLs
+URL_FR24_KRK = 'http://krk.data.fr24.com/zones/fcgi/feed.json'
+URL_FR24_ARN = 'http://arn.data.fr24.com/zones/fcgi/feed.json'
+# Params
+PARAM_FLIGHT = 'flight'
+PARAM_ARRAY = 'array'
+
+
 def getAircraftsFromJson():
-	flightDataStr = urllib.urlopen('http://krk.data.fr24.com/zones/fcgi/feed.json?array=1')
+	flightDataStr = urllib.urlopen('{0}?{1}={2}'.format(URL_FR24_KRK, PARAM_ARRAY, '1'))
 	flightData = json.load(flightDataStr)
 	return flightData["aircraft"]
 
 def getAircraft(searchedAircraft):
-	aircrafts = getAircraftsFromJson()
-	i = 0
-	while aircrafts[i][flightIdLong()] <> searchedAircraft and i < len(aircrafts) -1:
-		i = i + 1
-	if i < len(aircrafts):
-		return aircrafts[i]
-	else:
-		return 0
+	flightDataStr = urllib.urlopen('{0}?{1}={2}'.format(URL_FR24_KRK, PARAM_FLIGHT, searchedAircraft))
+	flightData = json.load(flightDataStr)
+	return flightData
 
 def getLocationJson(lat, lng):
 	locationStr = urllib.urlopen('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + str(lat) + ',' + str(lng) + '&sensor=false')
