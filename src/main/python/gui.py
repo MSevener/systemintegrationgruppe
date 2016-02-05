@@ -1,6 +1,7 @@
 import data.jsonReader as jsonReader
 import data.dataService as dataService
 import string
+import time
 
 def getAircraftMainPage():
     response = '<html><head>  <title>Aircrafts</title>  <meta charset="utf-8">  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script><script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script></head><body><div class="container">\
@@ -30,21 +31,17 @@ def getAircraftDetailPage(aircraftId):
         return ""
 
     flightId = aircraft["flight"]
-    #planeId = aircraft["aircraft"]
     planeType = aircraft["aircraft"]
     startAirportId = aircraft["from_iata"]
     targetAirportId = aircraft["to_iata"]
     startAirportName = aircraft["from_city"]
     targetAirportName = aircraft["to_city"]
-    departureTime = aircraft["departure"]
-    arrivalTime = aircraft["arrival"]
+    departureTime = time.localtime(aircraft["departure"])
+    departureTime = time.strftime("%d.%m.%Y %H:%M:%S", departureTime)
+    arrivalTime = time.localtime(aircraft["arrival"])
+    arrivalTime = time.strftime("%d.%m.%Y %H:%M:%S", arrivalTime)
     status = aircraft["status"]
     airline = aircraft["airline"]
-    #latitude = aircraft[jsonReader.latitude()]
-    #longitude = aircraft[jsonReader.longitude()]
-    #address = jsonReader.getAddress(latitude, longitude)
-    #speed = aircraft[jsonReader.speed()]
-    #altitude = aircraft[jsonReader.altitude()]
 
     response = '<!DOCTYPE html>' \
                '<html lang="en">' \
