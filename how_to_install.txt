@@ -17,3 +17,17 @@ git repo hier einfuegen
 #im Ordner projekt
 pyb install_dependencies
 pyb
+
+----------------------------------------
+# alternativ:
+
+sudo apt-get install git
+git clone https://github.com/MSevener/systemintegrationgruppe.git
+sudo apt-get install python-virtualenv
+virtualenv systemintegrationgruppe/
+cd systemintegrationgruppe/
+source bin/activate
+pip install pybuilder
+pyb install_dependencies
+cd src/main/python/
+python startseite.py
