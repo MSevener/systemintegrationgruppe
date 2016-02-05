@@ -7,7 +7,7 @@ Flightdata json: http://krk.data.fr24.com/zones/fcgi/feed.json ? Param = Value &
 
 Parameters:
 
-type        |  ?
+type        |  aircraft type
 
 flight      |  ?
 
