@@ -7,6 +7,8 @@ import jsonFiles
 URL_FR24_KRK = 'http://krk.data.fr24.com/zones/fcgi/feed.json'
 URL_FR24_ARN = 'http://arn.data.fr24.com/zones/fcgi/feed.json'
 URL_PLANE = 'http://data.flightradar24.com/_external/planedata_json.1.4.php'
+URL_GEONAMES_SUBDIVISION = 'http://api.geonames.org/countrySubdivisionJSON'
+
 # Params
 PARAM_FLIGHT = 'f'
 PARAM_ARRAY = 'array'
@@ -26,6 +28,11 @@ def getAircraft(searchedAircraft):
 	#print urllib2.urlopen(urllib2.Request(flightDataURL, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})).read()
 	flightData = json.load(urllib2.urlopen(urllib2.Request(flightDataURL, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})))
 	return flightData
+
+def getCountrySubdivision(lat, lng):
+	serviceURL = '{0}?lat={1}&lng={2}&username=demo'.format(URL_GEONAMES_SUBDIVISION, lat, lng)
+	result = json.load(urllib.urlopen(serviceURL))
+	return result
 
 def getLocationJson(lat, lng):
 	locationStr = urllib2.urlopen('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + str(lat) + ',' + str(lng) + '&sensor=false')

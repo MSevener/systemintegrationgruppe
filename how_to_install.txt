@@ -17,3 +17,30 @@ git repo hier einfuegen
 #im Ordner projekt
 pyb install_dependencies
 pyb
+
+----------------------------------------
+# alternativ:
+
+sudo apt-get install git
+git clone https://github.com/MSevener/systemintegrationgruppe.git
+sudo apt-get install python-virtualenv
+virtualenv systemintegrationgruppe/
+cd systemintegrationgruppe/
+source bin/activate
+pip install pybuilder
+pyb install_dependencies
+cd src/main/python/
+python startseite.py
+
+-----------------------------------------
+# MySQL Module install:
+sudo apt-get install python-dev
+sudo apt-get install libmysqlclient-dev
+sudo pip install mysql-python
+
+-------------------------------
+Geolocations der äußeren Punkte von Brb:
+Nord 53.558497, 13.793066
+Ost  52.065697, 14.759853
+Süd  51.361819, 13.739111
+West 53.121885, 11.265845
