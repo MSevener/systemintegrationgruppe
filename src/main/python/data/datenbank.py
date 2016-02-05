@@ -22,7 +22,7 @@ for x in range(0,numrows):
     for element in row:
         print element
 
-cursor.execute("INSERT INTO Flugdaten VALUES ('ID', 'StartAirport', 'targetAirport')")
+cursor.execute("INSERT INTO Flugdaten VALUES ('ID', 'StartAirport', 'targetAirport', '123')")
 db.commit()
 
 db.close()
