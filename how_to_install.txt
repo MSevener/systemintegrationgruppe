@@ -31,3 +31,9 @@ pip install pybuilder
 pyb install_dependencies
 cd src/main/python/
 python startseite.py
+
+-----------------------------------------
+# MySQL Module install:
+sudo apt-get install python-dev
+sudo apt-get install libmysqlclient-dev
+sudo pip install mysql-python
