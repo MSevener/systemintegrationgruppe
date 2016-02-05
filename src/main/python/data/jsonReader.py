@@ -12,13 +12,15 @@ PARAM_ARRAY = 'array'
 
 
 def getAircraftsFromJson():
-	flightDataStr = urllib.urlopen('{0}?{1}={2}'.format(URL_FR24_KRK, PARAM_ARRAY, '1'))
-	flightData = json.load(flightDataStr)
+	flightDataURL = '{0}?{1}={2}'.format(URL_FR24_KRK, PARAM_ARRAY, '1')
+	print "request json: {0}".format(flightDataURL)
+	flightData = json.load(urllib.urlopen(flightDataURL))
 	return flightData["aircraft"]
 
 def getAircraft(searchedAircraft):
-	flightDataStr = urllib.urlopen('{0}?{1}={2}'.format(URL_FR24_KRK, PARAM_FLIGHT, searchedAircraft))
-	flightData = json.load(flightDataStr)
+	flightDataURL = '{0}?{1}={2}'.format(URL_FR24_KRK, PARAM_FLIGHT, searchedAircraft)
+	print "request json: {0}".format(flightDataURL)
+	flightData = json.load(urllib.urlopen(flightDataURL))
 	return flightData
 
 def getLocationJson(lat, lng):
@@ -74,5 +76,5 @@ def speed():
 def squawk():
 	return 7
 
-print getAirportName("AAE")
+#print getAirportName("AAE")
 #print getAirportJson()
