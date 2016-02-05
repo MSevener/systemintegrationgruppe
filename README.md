@@ -8,5 +8,7 @@ Flightdata json: http://krk.data.fr24.com/zones/fcgi/feed.json ? Param = Value &
 Parameters:
 
 type        |  ?
+
 flight      |  ?
+
 array       | data modes
