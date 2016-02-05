@@ -1,7 +1,10 @@
 import urllib
 import json
 import jsonFiles
-
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from subprocess import Popen, PIPE
 # Constants
 # URLs
 URL_FR24_KRK = 'http://krk.data.fr24.com/zones/fcgi/feed.json'
@@ -43,6 +46,20 @@ def getAirportName(airportId):
 			return airport["name"]
 	return 0
 
+def sendEmail(aircraftID):
+	sender = "jo@gmail.com"
+	to = "rothe.maik93@gmail.com"
+	text = "Das Flugzeug mit der ID "
+	text = text + aircraftID + " hat einen Notfall"
+	message = MIMEText(text)
+	message['Subject'] = "Notfall"
+	message['From'] = sender
+	message['To'] = to
+		
+	p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
+	p.communicate(message.as_string())
+
+	
 def latitude():
 	return 2
 
