@@ -52,3 +52,6 @@ startairport VARCHAR(30) NOT NULL,
 targetairport VARCHAR(30) NOT NULL,
 reg_date TIMESTAMP
 )
+
+#sendmail installieren
+sudo apt-get install sendmail

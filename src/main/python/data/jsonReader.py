@@ -57,19 +57,6 @@ def getAirportName(airportId):
 			return airport["name"]
 	return 0
 
-def sendEmail(aircraftID):
-	sender = "jo@gmail.com"
-	to = "rothe.maik93@gmail.com"
-	text = "Das Flugzeug mit der ID "
-	text = text + aircraftID + " hat einen Notfall"
-	message = MIMEText(text)
-	message['Subject'] = "Notfall"
-	message['From'] = sender
-	message['To'] = to
-		
-	p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
-	p.communicate(message.as_string())
-
 	
 def latitude():
 	return 2
@@ -103,6 +90,9 @@ def speed():
 
 def squawk():
 	return 7
+
+def emergency():
+	return 18
 
 #print getAirportName("AAE")
 #print getAirportJson()
