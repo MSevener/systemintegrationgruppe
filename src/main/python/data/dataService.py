@@ -1,5 +1,6 @@
 import time
 import jsonReader
+import mailSender
 #import MySQLdb
 from threading import Timer
 
@@ -27,7 +28,20 @@ def requestAircraftData(setTimer):
     brbAircrafts = getBrbData(aircraftData)
 #    saveData(brbAircrafts)
 
+    # check for emergencys
+    emergencyCheck(aircraftData)
+
     return aircraftData
+
+
+#Check for emergency
+def emergencyCheck(aircraftData):
+	for aircraft in aircraftData:
+		flightId = aircraft[jsonReader.flightId()]
+		emg = aircraft[jsonReader.emergency()]
+		if emg <> 0:
+			mailSender.sendEmail(flightId)
+
 
 # Filter aircraft data for Brandenburg
 def getBrbData(aircraftData):
