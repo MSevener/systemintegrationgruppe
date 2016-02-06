@@ -1,6 +1,5 @@
 #!/usr/bin/python
 from bottle import route, run, template
-import urllib
 import os
 import subprocess
 import gui
