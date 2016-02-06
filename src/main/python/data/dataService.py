@@ -82,8 +82,16 @@ def saveData(data):
         startAirport = brbPlane[jsonReader.startAirport()]
         targetAirport = brbPlane[jsonReader.targetAirport()]
         timestamp = int(time.time())
+	getQuery = "SELECT * FROM {0} WHERE id = '{1}'".format(SQL_TABLENAME, flightId) 
+	updateQuery = "UPDATE {0} SET reg_date='{1}',startairport='{2}',targetairport='{3}' WHERE id = '{4}'".format(SQL_TABLENAME, timestamp, startAirport, targetAirport, flightId)
         insertQuery = "INSERT INTO {4} VALUES ('{0}', '{1}', '{2}', {3})".format(flightId, startAirport, targetAirport, timestamp, SQL_TABLENAME)
-        print insertQuery
+	
+	cursor.execute(getQuery)
+	data = cursor.fetchall()
+	if len(data) == 0:
+        	print insertQuery
+	else:
+		print updateQuery
 #        cursor.execute("INSERT INTO Flugdaten VALUES (brbPlane Id, 'StartAirport', 'targetAirport')")
 
     print "{0} aircrafts above Brandenburg detected.".format(int(cursor.rowcount))
