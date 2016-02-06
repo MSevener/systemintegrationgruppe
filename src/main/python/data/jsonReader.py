@@ -27,14 +27,14 @@ def getAircraftsFromJson():
 def getAircraft(searchedAircraft):
 	flightDataURL = '{0}?{1}={2}&{3}={4}'.format(URL_PLANE,PARAM_FLIGHT,searchedAircraft,FORMAT,2)
 	print "request json: {0}".format(flightDataURL)
-	#req = urllib.request.Request(flightDataURL, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
+	#req = urllib2.request.Request(flightDataURL, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
 	#print urllib2.urlopen(urllib2.Request(flightDataURL, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})).read()
 	flightData = json.load(urllib2.urlopen(urllib2.Request(flightDataURL, data=None, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})))
 	return flightData
 
 def getCountrySubdivision(lat, lng):
 	serviceURL = '{0}?lat={1}&lng={2}&username=demo'.format(URL_GEONAMES_SUBDIVISION, lat, lng)
-	result = json.load(urllib.urlopen(serviceURL))
+	result = json.load(urllib2.urlopen(serviceURL))
 	return result
 
 def getLocationJson(lat, lng):
