@@ -91,8 +91,6 @@ def speed():
 def squawk():
 	return 7
 
-def emergency():
-	return 18
 
 #print getAirportName("AAE")
 #print getAirportJson()
