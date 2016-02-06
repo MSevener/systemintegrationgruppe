@@ -11,4 +11,5 @@ default_task = "publish"
 def initialize(project):
 	project.build_depends_on('mockito')
 	project.build_depends_on('bottle')
+	project.build_depends_on('boto3')
 	project.build_depends_on('MySQL-python')

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from bottle import route, run, template
+from bottle import route, run, template, request
 import os
 import subprocess
 import gui
@@ -22,7 +22,8 @@ def showAircrafts():
 
 @route('/aircrafts/<aircraftId>')
 def showDetails(aircraftId):
-	return gui.getAircraftDetailPage(aircraftId)
+	planeTypeShort = request.query.get('type')
+	return gui.getAircraftDetailPage(aircraftId, planeTypeShort)
 
 run(host=getHostname(), port=8080)
 #print getHostname()

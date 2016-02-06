@@ -1,5 +1,6 @@
 import time
 import jsonReader
+import mailSender
 import MySQLdb
 from threading import Timer
 
@@ -27,7 +28,20 @@ def requestAircraftData(setTimer):
     brbAircrafts = getBrbData(aircraftData)
     saveData(brbAircrafts)
 
+    # check for emergencys
+    emergencyCheck(aircraftData)
+
     return aircraftData
+
+
+#Check for emergency
+def emergencyCheck(aircraftData):
+	for aircraft in aircraftData:
+		flightId = aircraft[jsonReader.flightId()]
+		emg = aircraft[jsonReader.emergency()]
+		if emg <> 0:
+			mailSender.sendEmail(flightId)
+
 
 # Filter aircraft data for Brandenburg
 def getBrbData(aircraftData):
@@ -68,16 +82,11 @@ def saveData(data):
         startAirport = brbPlane[jsonReader.startAirport()]
         targetAirport = brbPlane[jsonReader.targetAirport()]
         timestamp = int(time.time())
-        insertQuery = "INSERT INTO Flugdaten VALUES ('{0}', '{1}', '{2}', {3})".format(flightId, startAirport, targetAirport, timestamp)
-#        insertQuery = "UPDATE {0} SET {6}='{2}', {7}='{3}', {8}={4} " \
-#                      "WHERE {5}='{1}' " \
-#                      "IF @@ROWCOUNT=0 " \
-#                      "INSERT INTO {0} VALUES ('{1}', '{2}', '{3}', {4})"\
-#            .format(SQL_TABLENAME,flightId,startAirport,targetAirport,timestamp,SQL_COLUMN_ID,SQL_COLUMN_START,SQL_COLUMN_TARGET,SQL_COLUMN_DATE)
-#        print insertQuery
-        cursor.execute(insertQuery)
+        insertQuery = "INSERT INTO {4} VALUES ('{0}', '{1}', '{2}', {3})".format(flightId, startAirport, targetAirport, timestamp, SQL_TABLENAME)
+        print insertQuery
+#        cursor.execute("INSERT INTO Flugdaten VALUES (brbPlane Id, 'StartAirport', 'targetAirport')")
 
-    print "{0} aircrafts saved in DB.".format(int(cursor.rowcount)+1)
+    print "{0} aircrafts above Brandenburg detected.".format(int(cursor.rowcount))
     db.commit()
     db.close()
 
