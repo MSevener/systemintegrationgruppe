@@ -1,5 +1,6 @@
 import data.jsonReader as jsonReader
 import data.dataService as dataService
+import data.BucketService as bucketService
 import string
 import time
 
@@ -10,13 +11,15 @@ def getAircraftMainPage():
     <thead><tr><th></th><th>FlugID</th><th>Startflughafen</th><th>Zielflughafen</th></tr></thead>' \
                '<tbody>'
     aircrafts = dataService.requestAircraftData(False)
-    for aircraft in aircrafts:
+    for i in range(1,100):
+        aircraft= aircrafts[i]
         flightId = aircraft[jsonReader.flightId()]
         startAirport = aircraft[jsonReader.startAirport()]
         targetAirport = aircraft[jsonReader.targetAirport()]
+        planeTypeCode = aircraft[jsonReader.planeTypeCode()]
         if flightId <> "" and startAirport <> "" and targetAirport <> "":
-            response = response + '<tr onclick="location.href= \'aircrafts/' + flightId + '\'\">' \
-                                  '<td>' + "<img src = "" />" + ' </td>' \
+            response = response + '<tr onclick="location.href= \'aircrafts/' + flightId + '?type=' + planeTypeCode + '\'\">' \
+                                  '<td>' + "<img src = \"" + bucketService.getThumbnailPath(planeTypeCode) + "\" />" + ' </td>' \
                                   '<td>' + str(flightId) + ' </td>' \
                                   '<td>' + str(startAirport) + '</td>' \
                                   '<td>' + str(targetAirport) + '</td>' \
@@ -24,9 +27,8 @@ def getAircraftMainPage():
     response = response + '</tbody>  </table></div>'
     return response
 
-def getAircraftDetailPage(aircraftId):
+def getAircraftDetailPage(aircraftId, planeTypeShort):
     aircraft=jsonReader.getAircraft(aircraftId)
-    print aircraft
     if aircraft == 0:
         return ""
 
@@ -42,20 +44,23 @@ def getAircraftDetailPage(aircraftId):
     arrivalTime = time.strftime("%d.%m.%Y %H:%M:%S", arrivalTime)
     status = aircraft["status"]
     airline = aircraft["airline"]
+    imageURL = aircraft["image"]
+
+    bucketService.getImagePath("src/dummy.jpg", imageURL)
 
     response = '<!DOCTYPE html>' \
                '<html lang="en">' \
                '<html lang="en">' \
                '<head>  <title>Flugdaten</title>  <meta charset="utf-8">  <meta name="viewport" content="width=device-width, initial-scale=1">  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>' \
                '</head>' \
-               '<body><div class="container col-md-8">  <h1>Flugzeugdaten</h1> \
+               '<body><div class="container col-md-8"><h1>Flugzeugdaten</h1> \
                 <table class="table table-striped"><tbody>' \
               '<tr><td class = "col-md-4"><b>Flugzeugtyp</b></td>' \
               '<td>' + str(planeType).encode("utf-8") + '</td></tr>' \
                 '<tr><td class = "col-md-4"><b>Airline</b></td>' \
               '<td>' + str(airline).encode("utf-8")+ '</td></tr>' \
               '</tbody></table></div><div class = "col-md-4">' \
-              '<img src = "https://s3.amazonaws.com/mandelbrotm/Flugzeug.jpg" width = "400px" height = "250px" />' \
+              '<img src = "' + bucketService.getImagePath(planeTypeShort, imageURL) + '" width = "400px" height = "250px" />' \
               '</div>' \
               '<div class="container col-md-12"><h1>Reisedaten</h1><table class="table table-striped"><tbody>' \
               '<tr><td><b>Startflughafen</b></td>' \
