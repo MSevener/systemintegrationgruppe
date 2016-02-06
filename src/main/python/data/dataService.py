@@ -38,8 +38,8 @@ def requestAircraftData(setTimer):
 def emergencyCheck(aircraftData):
 	for aircraft in aircraftData:
 		flightId = aircraft[jsonReader.flightId()]
-		emg = aircraft[jsonReader.emergency()]
-		if emg <> 0:
+		emg = aircraft[jsonReader.squawk()]
+		if emg == 7500 or emg == 7600 or emg ==  7700:
 			mailSender.sendEmail(flightId)
 
 
