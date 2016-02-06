@@ -44,3 +44,11 @@ Nord 53.558497, 13.793066
 Ost  52.065697, 14.759853
 Süd  51.361819, 13.739111
 West 53.121885, 11.265845
+--------------------------------
+# Table Flugdaten
+CREATE TABLE Flugdaten (
+id VARCHAR(30) PRIMARY KEY,
+startairport VARCHAR(30) NOT NULL,
+targetairport VARCHAR(30) NOT NULL,
+reg_date TIMESTAMP
+)
