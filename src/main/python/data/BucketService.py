@@ -1,5 +1,6 @@
 import boto3
 import urllib2
+import os.path
 
 s3 = boto3.client('s3')
 
@@ -16,11 +17,10 @@ def addImageFromUrl(key, url):
 
 def getImagePath(key, alternativePath):
     imageStream = ""
-    imagePath = alternativePath
+    imagePath = ""
     bucketkey = "src/" + key + ".jpg"
     s3ElementPath = "https://s3.amazonaws.com/" + bucketname + "/src/" + key + ".jpg"
     pictureAvailable = 0
-
     try:
         imageStream = s3.get_object(Bucket=bucketname,Key = bucketkey)
         imagePath = s3ElementPath
@@ -36,23 +36,16 @@ def getImagePath(key, alternativePath):
     print imagePath
     return imagePath
 
-def getThumbnailPath(key):
-    imageStream = ""
-    thumbnailAvailable = 0
-    dummyPath = "https://s3.amazonaws.com/" + bucketname + "/thumbnail/dummy.jpg"
-    path = dummyPath
-    bucketkey = "thumbnail/" + key + ".jpg"
-    try:
-        imageStream = s3.get_object(Bucket=bucketname,Key = bucketkey)
-        path = "https://s3.amazonaws.com/" + bucketname + "/thumbnail/" + key + ".jpg"
-        thumbnailAvailable = 1
-    except Exception as e:
-        print "Nimm dummy Pfad"
-    if thumbnailAvailable == 0:
-        try:
-            imageStream = s3.get_object(Bucket=bucketname,Key =dummy)
-            path = dummyPath
-        except Exception as e:
-            print e
-    print path
-    return path
+def getThumbnailImg(key):
+    newPath= "https://s3.amazonaws.com/" + bucketname + "/thumbnail/" + key + ".jpg"
+    thumbnail = "<img src = \"" + newPath + "\" onError=\"this.src = 'https://s3.amazonaws.com/" + bucketname + "/thumbnail/dummy.jpg' \" />"
+    return thumbnail
+
+def deleteThumbnails():
+    bucket = boto3.resource('s3').Bucket(bucketname)
+    for key in bucket.objects.filter(Prefix="thumbnail/"):
+        if not key.__eq__(boto3.resource('s3').ObjectSummary(bucketname, unicode("thumbnail/dummy.jpg"))):
+            key.delete()
+    for key in bucket.objects.filter(Prefix="src/"):
+        if not key.__eq__(boto3.resource('s3').ObjectSummary(bucketname, unicode("src/dummy.jpg"))):
+            key.delete()
