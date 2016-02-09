@@ -3,10 +3,10 @@ from email.mime.text import MIMEText
 from subprocess import Popen, PIPE
 
 def sendEmail(aircraftID):
-	sender = "jo@gmail.com"
-	to = "rothe.maik93@gmail.com"
+	sender = "tino.maik.max@sysintproj.de"
+	to = "si@thomas-preuss.de"
 	text = "Das Flugzeug mit der ID "
-	text = text + aircraftID + " hat einen Notfall"
+	text = text + aircraftID + " hat einen Notfall."
 	message = MIMEText(text)
 	message['Subject'] = "Notfall"
 	message['From'] = sender
