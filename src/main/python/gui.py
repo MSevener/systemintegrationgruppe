@@ -11,7 +11,7 @@ def getAircraftMainPage():
     <thead><tr><th></th><th>FlugID</th><th>Startflughafen</th><th>Zielflughafen</th></tr></thead>' \
                '<tbody>'
     aircrafts = dataService.requestAircraftData(False)
-    for i in range(1,100):
+    for i in range(0,len(aircrafts) - 1):
         aircraft= aircrafts[i]
         flightId = aircraft[jsonReader.flightId()]
         startAirport = aircraft[jsonReader.startAirport()]
@@ -19,7 +19,7 @@ def getAircraftMainPage():
         planeTypeCode = aircraft[jsonReader.planeTypeCode()]
         if flightId <> "" and startAirport <> "" and targetAirport <> "":
             response = response + '<tr onclick="location.href= \'aircrafts/' + flightId + '?type=' + planeTypeCode + '\'\">' \
-                                  '<td>' + "<img src = \"" + bucketService.getThumbnailPath(planeTypeCode) + "\" />" + ' </td>' \
+                                  '<td>' + bucketService.getThumbnailImg(planeTypeCode) + ' </td>' \
                                   '<td>' + str(flightId) + ' </td>' \
                                   '<td>' + str(startAirport) + '</td>' \
                                   '<td>' + str(targetAirport) + '</td>' \

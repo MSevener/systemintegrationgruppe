@@ -3,6 +3,7 @@ from bottle import route, run, template, request
 import os
 import subprocess
 import gui
+import data.BucketService as bucketService
 
 def getHostname():
 	hostprocess = subprocess.Popen(['ec2metadata', '--public-hostname'], stdout=subprocess.PIPE)
@@ -24,6 +25,11 @@ def showAircrafts():
 def showDetails(aircraftId):
 	planeTypeShort = request.query.get('type')
 	return gui.getAircraftDetailPage(aircraftId, planeTypeShort)
+
+@route('/deleteThumbnails')
+def deleteThumbnails():
+	bucketService.deleteThumbnails()
+
 
 run(host=getHostname(), port=8080)
 #print getHostname()
