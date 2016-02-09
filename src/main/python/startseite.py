@@ -20,6 +20,9 @@ def index(name):
 def showAircrafts():
 	return gui.getAircraftMainPage()
 
+@route('/brb')
+def showAircraftsBRB():
+	return gui.getAircraftsBrbPage()
 
 @route('/aircrafts/<aircraftId>')
 def showDetails(aircraftId):

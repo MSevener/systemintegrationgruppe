@@ -27,6 +27,28 @@ def getAircraftMainPage():
     response = response + '</tbody>  </table></div>'
     return response
 
+def getAircraftsBrbPage():
+	data = dataService.getAircraftsBrb()
+	
+	response = '<html><head>  <title>Aircrafts</title>  <meta charset="utf-8">  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script><script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script></head><body><div class="container">\
+        <h1>Flugzeuge &uumlber Brandenburg</h1> \
+        <table class="table table-hover"> \
+        <thead><tr><th>FlugID</th><th>Startflughafen</th><th>Zielflughafen</th><th>Datum / Zeit</th></tr></thead>' \
+                   '<tbody>'
+
+	for row in data:
+		response = response + '<tr>' \
+                                  '<td>' + str(row[0]) + ' </td>' \
+                                  '<td>' + str(row[1]) + '</td>' \
+                                  '<td>' + str(row[2]) + '</td>' \
+				  '<td>' + str(row[3]) + '</td>' \
+                                  '</tr>'
+
+
+	response = response + '</tbody>  </table></div>'
+        return response
+
+
 def getAircraftDetailPage(aircraftId, planeTypeShort):
     aircraft=jsonReader.getAircraft(aircraftId)
     if aircraft == 0:
