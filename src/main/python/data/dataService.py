@@ -107,6 +107,19 @@ def saveData(data):
     db.commit()
     db.close()
 
+def getAircraftsBrb():
+	db = MySQLdb.connect(host="systemintegration.cmavq3o8re9w.us-east-1.rds.amazonaws.com", user="system", passwd="datenbank",db="flugdaten")
+  	cursor = db.cursor()
+	query = "SELECT * FROM {0}".format(SQL_TABLENAME)
+
+	cursor.execute(query)
+	data = cursor.fetchall()
+
+	cursor.close()
+	db.close()
+
+	return data
+
 def initialize():
     defineTimer()
 
