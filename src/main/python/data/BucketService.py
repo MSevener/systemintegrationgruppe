@@ -18,6 +18,8 @@ def addImageFromUrl(key, url):
 def getImagePath(key, alternativePath):
     imageStream = ""
     imagePath = ""
+    if key is None:
+        return "https://s3.amazonaws.com/" + bucketname + "/src/dummy.jpg"
     bucketkey = "src/" + key + ".jpg"
     s3ElementPath = "https://s3.amazonaws.com/" + bucketname + "/src/" + key + ".jpg"
     pictureAvailable = 0
