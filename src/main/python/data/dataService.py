@@ -3,13 +3,10 @@ import jsonReader
 import mailSender
 import MySQLdb
 from threading import Timer
+from termcolor import colored
 
 TIMER_SECONDS = 60 * 30 # alle 30min
 
-LAT_BRB_NORTH = 53.558497
-LAT_BRB_SOUTH = 51.361819
-LNG_BRB_EAST = 14.759853
-LNG_BRB_WEST = 11.265845
 
 # Defines a Timer for the next data request
 def defineTimer():
@@ -45,7 +42,9 @@ def filterData(aircraftData):
         targetAirport = aircraft[jsonReader.targetAirport()]
         if flightId != "" and startAirport != "" and targetAirport != "":
             filteredAircrafts.append(aircraft)
-    print "Empty aircrafts filtered: {0}".format(len(aircraftData)-len(filteredAircrafts))
+    print colored("{0} aircrafts found. ({1} omitted -> no data)"\
+                  .format(len(aircraftData),len(aircraftData)-len(filteredAircrafts)),\
+                  'green')#(len(aircraftData)==1500) if 'green' else 'red')
     return filteredAircrafts
 
 # Check for emergency
@@ -56,6 +55,42 @@ def emergencyCheck(aircraftData):
         if emg == 7500 or emg == 7600 or emg ==  7700:
             mailSender.sendEmail(flightId)
 
+# Brandenburg Geolocation-Ranges
+# Lat between 53.558497 - 51.361819
+# Lng between 14.759853 - 11.265845
+LAT_BRB_NORTH = 53.558497
+LAT_BRB_SOUTH = 51.361819
+LNG_BRB_EAST = 14.759853
+LNG_BRB_WEST = 11.265845
+
+# Zip Code Ranges for Brandenburg
+# http://www.cebus.ch/de/plz-bundesland.htm
+brbZipCodeRanges = [[1941,1998],[3001,3253],[4891,4938],[14401,14715],[14723,16949],
+                    [17258,17258],[17261,17291],[17309,17309],[17321,17321],
+                    [17326,17326],[17335,17335],[17337,17337],[19307,19357]]
+
+# Check: is in Brandenburg?
+def checkIsInBrb(lat, lng):
+    # rude filering with geolocations of Brandenburg:
+    if not (lat < LAT_BRB_NORTH and lat > LAT_BRB_SOUTH and lng < LNG_BRB_EAST and lng > LNG_BRB_WEST):
+        return False
+    # Try get location & analyze ZIP Code
+    location = jsonReader.getAddress(lat, lng)
+    #print location
+    try:
+        zipAndCity = location.split(",")[1].strip()
+        zip = int(zipAndCity.split()[0])
+    except:
+        # couldnt extract zip code
+        print colored("Couldnt extract zip code",'red'), "from location='{0}'".format(location.encode('utf-8'))
+        return False
+    # check location zipcode is in Brb
+    for brbZipRange in brbZipCodeRanges:
+        if zip > brbZipRange[0] and zip < brbZipRange[1]:
+            print "Aircraft found in {0}".format(location.encode('utf-8'))
+            return True #is in Brb
+    return False #zipcode not in Brb
+
 # Filter aircraft data for Brandenburg
 def getBrbData(aircraftData):
     brbAircrafts = [] #instanciate Resultlist
@@ -63,17 +98,12 @@ def getBrbData(aircraftData):
     for aircraft in aircraftData:
         lat = aircraft[jsonReader.latitude()]
         lng = aircraft[jsonReader.longitude()]
-        # rude filering with geolocations of Brandenburg:
-        # Lat between 53.558497 - 51.361819    # Lng between 14.759853 - 11.265845
-        aircraftIsInBrb = lat < LAT_BRB_NORTH and lat > LAT_BRB_SOUTH and lng < LNG_BRB_EAST and lng > LNG_BRB_WEST
+        aircraftIsInBrb = checkIsInBrb(lat, lng)
         if not aircraftIsInBrb:
             continue
         brbAircrafts.append(aircraft)
 
-    # check detailed location
-    #location = jsonReader.getCountrySubdivision(lat, lng)
-    #print location
-    print "{0} aircrafts found above Brandenburg.".format(len(brbAircrafts))
+    print colored("{0} aircrafts found above Brandenburg.".format(len(brbAircrafts)),'green')
     return brbAircrafts
 
 SQL_TABLENAME = 'Flugdaten'
@@ -98,7 +128,6 @@ def saveData(data):
         timestamp = int(time.time())
         replaceQuery = "REPLACE INTO {0} SET id='{4}',startairport='{2}',targetairport='{3}',reg_date=FROM_UNIXTIME({1})"\
             .format(SQL_TABLENAME, timestamp, startAirport, targetAirport, flightId)
-        print str(flightId)
         cursor.execute(replaceQuery)
         if int(cursor.rowcount)!=-1:
             cnt+=1
