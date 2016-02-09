@@ -16,6 +16,8 @@ def addImageFromUrl(key, url):
         print e
 
 def getImagePath(key, alternativePath):
+    if alternativePath == "":
+	return key
     imageStream = ""
     imagePath = ""
     bucketkey = "src/" + key + ".jpg"

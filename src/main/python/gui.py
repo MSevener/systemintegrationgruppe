@@ -55,18 +55,34 @@ def getAircraftDetailPage(aircraftId, planeTypeShort):
         return ""
 
     flightId = aircraft["flight"]
-    planeType = aircraft["aircraft"]
-    startAirportId = aircraft["from_iata"]
-    targetAirportId = aircraft["to_iata"]
-    startAirportName = aircraft["from_city"]
-    targetAirportName = aircraft["to_city"]
+    planeType = ""
+    if "aircraft" in aircraft:
+   	 planeType = aircraft["aircraft"]
+    startAirportId = ""
+    if "from_iata" in aircraft:
+         startAirportId = aircraft["from_iata"]
+    targetAirportId = ""
+    if "to_iata" in aircraft:
+         targetAirportId = aircraft["to_iata"]
+    startAirportName = ""
+    if "from_city" in aircraft:
+         startAirportName = aircraft["from_city"]
+    targetAirportName = ""
+    if "to_city" in aircraft:
+         targetAirportName = aircraft["to_city"]
     departureTime = time.localtime(aircraft["departure"])
     departureTime = time.strftime("%d.%m.%Y %H:%M:%S", departureTime)
     arrivalTime = time.localtime(aircraft["arrival"])
     arrivalTime = time.strftime("%d.%m.%Y %H:%M:%S", arrivalTime)
-    status = aircraft["status"]
-    airline = aircraft["airline"]
-    imageURL = aircraft["image"]
+    status = ""
+    if "status" in aircraft:   
+         status = aircraft["status"]
+    airline = ""
+    if "airline" in aircraft:
+         airline = aircraft["airline"]
+    imageURL = ""
+    if "image" in aircraft:
+         imageURL = aircraft["image"]
 
     bucketService.getImagePath("src/dummy.jpg", imageURL)
 
@@ -78,23 +94,23 @@ def getAircraftDetailPage(aircraftId, planeTypeShort):
                '<body><div class="container col-md-8"><h1>Flugzeugdaten</h1> \
                 <table class="table table-striped"><tbody>' \
               '<tr><td class = "col-md-4"><b>Flugzeugtyp</b></td>' \
-              '<td>' + str(planeType).encode("utf-8") + '</td></tr>' \
+              '<td>{8}</td></tr>' \
                 '<tr><td class = "col-md-4"><b>Airline</b></td>' \
-              '<td>' + str(airline).encode("utf-8")+ '</td></tr>' \
+              '<td>{7}</td></tr>' \
               '</tbody></table></div><div class = "col-md-4">' \
-              '<img src = "' + bucketService.getImagePath(planeTypeShort, imageURL) + '" width = "400px" height = "250px" />' \
+              '<img src = "{9}" width = "400px" height = "250px" />' \
               '</div>' \
               '<div class="container col-md-12"><h1>Reisedaten</h1><table class="table table-striped"><tbody>' \
               '<tr><td><b>Startflughafen</b></td>' \
-              '<td>' + str(startAirportName).encode("utf-8") + ' (' + str(startAirportId).encode("utf-8") + ')</td></tr>' \
+              '<td>{5} ({6})</td></tr>' \
                 '<tr><td><b>Abflugzeit</b></td>' \
-              '<td>' + str(departureTime).encode("utf-8")+ '</td></tr>' \
+              '<td>{4}</td></tr>' \
               '<tr><td><b>Zielflughafen</b></td>' \
-              '<td>' + str(targetAirportName).encode("utf-8") + ' (' + str(targetAirportId).encode("utf-8") + ')</td></tr>' \
+              '<td>{2} ({3})</td></tr>' \
                 '<tr><td class = "col-md-4"><b>Ankunftszeit</b></td>' \
-              '<td>' + str(arrivalTime).encode("utf-8")+ '</td></tr>' \
+              '<td>{1}</td></tr>' \
                 '<tr><td><b>Status</b></td>' \
-                '<td>' + str(status).encode("utf-8") + '</td></tr>' \
+                '<td>{0}</td></tr>' \
                 '</tbody></table></div>' \
-                '</html>'
+                '</html>'.format(str(status),str(arrivalTime).encode("utf-8"),str(targetAirportName).encode("utf-8"),str(targetAirportId).encode("utf-8"),str(departureTime).encode("utf-8"),str(startAirportName).encode("utf-8"),str(startAirportId).encode("utf-8"),str(airline).encode("utf-8"),str(planeType).encode("utf-8"),bucketService.getImagePath(planeTypeShort, imageURL))
     return response
